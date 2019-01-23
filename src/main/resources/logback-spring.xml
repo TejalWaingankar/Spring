@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+<springProperty scope="context" name="springAppName" source="spring.application.name"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} %magenta([%thread]) %highlight(%-5level) [${springAppName}, %X{X-B3-TraceId:-}, %X{X-B3-SpanId:-}] %logger{36}.%M - %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+    <appender name="EMAIL" class="ch.qos.logback.classic.net.SMTPAppender">
+    <smtpHost>smtp.gmail.com</smtpHost>
+    <smtpPort>587</smtpPort>
+    <STARTTLS>true</STARTTLS>
+    <asynchronousSending>true</asynchronousSending>
+    <username>myrndaccount@gmail.com</username>
+    <password>*****</password>
+    <to>tejal.waingankar@synechron.com</to>
+    <to>tejal.waingankar@gmail.com</to>
+    <from>myrndaccount@gmail.com</from>
+    <subject>TESTING: %logger{20} - %m</subject>
+    <layout class="ch.qos.logback.classic.PatternLayout">
+        <pattern>%date %-5level %logger{35} - %message%n</pattern>
+    </layout>
+    
+</appender>
+
+<appender name="FILTER" 
+  class="ch.qos.logback.core.FileAppender">
+    <filter class="ch.qos.logback.core.filter.EvaluatorFilter">      
+        <evaluator class="ch.qos.logback.classic.boolex.JaninoEventEvaluator">
+            <expression>return (message.toLowerCase().contains("error"));</expression>
+        </evaluator>
+        <OnMismatch>DENY</OnMismatch>
+        <OnMatch>ACCEPT</OnMatch>
+    </filter>
+    <file>BootLog.log</file>
+    <append>true</append>
+    <encoder>
+        <!-- <pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %red(%-5level) %logger{36}.%M - %msg%n</pattern> -->
+        <pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M - %msg%n</pattern>
+    </encoder>
+</appender>
+    
+    
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="EMAIL" />
+        <appender-ref ref="FILTER" />
+    </root>
+ 
+</configuration>
