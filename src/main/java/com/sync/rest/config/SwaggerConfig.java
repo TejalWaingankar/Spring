@@ -44,6 +44,6 @@ public class SwaggerConfig {
 				.consumes(Default_Produces_Consumes)
 				.select()
 				.apis(RequestHandlerSelectors.any())
-				.paths(Predicates.not(PathSelectors.regex("/error.*"))).build();
+				.paths(Predicates.not(PathSelectors.regex("(/actuator.*|/error.*)"))).build();
 	}
 }
