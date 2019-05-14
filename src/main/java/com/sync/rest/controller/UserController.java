@@ -23,6 +23,11 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
+@ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Success..!!!"),
+        @ApiResponse(code = 401, message = "Not authorized..!!!"),
+        @ApiResponse(code = 403, message = "Forbidden..!!!"),
+        @ApiResponse(code = 404, message = "Not found..!!!") })
 @RestController
 @Api(value="Swagger2UserController")
 public class UserController {
@@ -31,22 +36,12 @@ public class UserController {
 	private UserDaoService service;
 
 	@ApiOperation(value = "Get list of users in the System ", response = List.class)
-	@ApiResponses(value = {
-	            @ApiResponse(code = 200, message = "Success|OK"),
-	            @ApiResponse(code = 401, message = "not authorized!"),
-	            @ApiResponse(code = 403, message = "forbidden!!!"),
-	            @ApiResponse(code = 404, message = "not found!!!") })
 	@GetMapping("/users")
 	public List<User> retrieveAllUsers() {
 		return service.findAll();
 	}
 
 	@ApiOperation(value = "Get single user in the System ", response = User.class)
-	@ApiResponses(value = {
-	            @ApiResponse(code = 200, message = "Success|OK"),
-	            @ApiResponse(code = 401, message = "not authorized!"),
-	            @ApiResponse(code = 403, message = "forbidden!!!"),
-	            @ApiResponse(code = 404, message = "not found!!!") })
 	@GetMapping("/users/{id}")
 	public User retrieveUser(@PathVariable int id) {
 		User user = service.findOne(id);
@@ -58,11 +53,6 @@ public class UserController {
 	}
 
 	@ApiOperation(value = "Delete a user in the System ", response = ResponseEntity.class)
-	@ApiResponses(value = {
-	            @ApiResponse(code = 200, message = "Success|OK"),
-	            @ApiResponse(code = 401, message = "not authorized!"),
-	            @ApiResponse(code = 403, message = "forbidden!!!"),
-	            @ApiResponse(code = 404, message = "not found!!!") })
 	@DeleteMapping("/users/{id}")
 	public ResponseEntity<User> deleteUser(@PathVariable int id) {
 		User user = service.deleteById(id);
@@ -74,11 +64,6 @@ public class UserController {
 	}
 
 	@ApiOperation(value = "Create a user in the System ", response = ResponseEntity.class)
-	@ApiResponses(value = {
-	            @ApiResponse(code = 200, message = "Success|OK"),
-	            @ApiResponse(code = 401, message = "not authorized!"),
-	            @ApiResponse(code = 403, message = "forbidden!!!"),
-	            @ApiResponse(code = 404, message = "not found!!!") })
 	@PostMapping("/users")
 	public ResponseEntity<Object> createUser(@Valid @RequestBody User user /*, BindingResult binding*/) {
 		
