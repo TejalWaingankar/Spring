@@ -14,20 +14,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sync.rest.annotation.CustomSwaggerAPIResponses;
 import com.sync.rest.exception.UserNotFoundException;
 import com.sync.rest.model.User;
 import com.sync.rest.service.UserDaoService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 
-@ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Success..!!!"),
-        @ApiResponse(code = 401, message = "Not authorized..!!!"),
-        @ApiResponse(code = 403, message = "Forbidden..!!!"),
-        @ApiResponse(code = 404, message = "Not found..!!!") })
+@CustomSwaggerAPIResponses
 @RestController
 @Api(value="Swagger2UserController")
 public class UserController {
@@ -47,7 +42,7 @@ public class UserController {
 		User user = service.findOne(id);
 
 		if (user == null)
-			throw new UserNotFoundException("id-" + id);
+			throw new UserNotFoundException("Invalid User Id :- " + id);
 
 		return user;
 	}
@@ -58,7 +53,7 @@ public class UserController {
 		User user = service.deleteById(id);
 
 		if (user == null)
-			throw new UserNotFoundException("id-" + id);
+			throw new UserNotFoundException("Invalid User Id :- " + id);
 
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
