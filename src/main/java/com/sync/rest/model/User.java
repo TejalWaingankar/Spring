@@ -4,14 +4,20 @@ import java.util.Date;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel ("User Model")
 public class User {
 
 	private Integer id;
 
 	@Size(min=4, max=22, message="Name size should be between 4 and 22")
+	@ApiModelProperty("Name should be between 4 and 22")
 	private String name;
 
 	@Past(message="Birthdate can NOT be in future.")
+	@ApiModelProperty("Birthdate can NOT be in future.")
 	private Date birthDate;
 	
 	public User() {
