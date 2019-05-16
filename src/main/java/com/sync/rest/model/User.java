@@ -1,13 +1,29 @@
 package com.sync.rest.model;
 
 import java.util.Date;
+
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel ("User Model")
+
+/**
+ * Another way to ignore JSON properties. Means they can't be shown in the JSON response.
+ * But this approach is not recommended as its through hard coding values.
+ * Tomorrow, if the variable name change, you need to change this name as well.
+ * 
+ * @JsonIgnoreProperties({"name","birthDate"})
+ * 
+ * To ignore any unknown properties in JSON input without exception use,
+ * 
+ * @JsonIgnoreProperties(ignoreUnknown=true)
+ */
+
 public class User {
 
 	private Integer id;
@@ -18,6 +34,7 @@ public class User {
 
 	@Past(message="Birthdate can NOT be in future.")
 	@ApiModelProperty("Birthdate can NOT be in future.")
+	@JsonIgnore
 	private Date birthDate;
 	
 	public User() {
