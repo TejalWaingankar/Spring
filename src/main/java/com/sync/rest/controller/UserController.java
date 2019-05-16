@@ -31,7 +31,7 @@ public class UserController {
 	private UserDaoService service;
 
 	@ApiOperation(value = "Get list of users in the System ", response = List.class)
-	@GetMapping("/users")
+	@GetMapping(value="/users", produces= {"application/json","application/xml"})
 	public List<User> retrieveAllUsers() {
 		return service.findAll();
 	}

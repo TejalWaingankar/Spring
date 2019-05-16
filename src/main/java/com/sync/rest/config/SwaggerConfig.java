@@ -22,7 +22,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig {
 	
-	private static final Set<String> Default_Produces_Consumes = new HashSet<String>(Arrays.asList("application/json"));
+	private static final Set<String> Default_Produces_Consumes = new HashSet<String>(Arrays.asList("application/json","application/xml"));
 
 	@Value("${server.port}")
 	private String appPort;
