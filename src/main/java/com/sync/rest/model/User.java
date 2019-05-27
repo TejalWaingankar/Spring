@@ -2,6 +2,10 @@ package com.sync.rest.model;
 
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
@@ -23,9 +27,11 @@ import io.swagger.annotations.ApiModelProperty;
  * 
  * @JsonIgnoreProperties(ignoreUnknown=true)
  */
-
+@Entity
 public class User {
 
+	@Id
+	@GeneratedValue(strategy=GenerationType.SEQUENCE)
 	private Integer id;
 
 	@Size(min=4, max=22, message="Name size should be between 4 and 22")
