@@ -1,4 +1,4 @@
-package com.sync.rest.controller.jpa;
+package com.sync.rest.jpa.controller;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sync.rest.annotation.CustomSwaggerAPIResponses;
 import com.sync.rest.exception.UserNotFoundException;
+import com.sync.rest.jpa.repository.PostRepository;
+import com.sync.rest.jpa.repository.UserRepository;
+import com.sync.rest.model.Post;
 import com.sync.rest.model.User;
-import com.sync.rest.service.UserDaoService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,20 +31,20 @@ import io.swagger.annotations.ApiOperation;
 @Api(value="Swagger2UserJPAController")
 @RequestMapping(value="/jpa")
 public class UserJPAController {
-
-	@Autowired
-	private UserDaoService service;
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private PostRepository postRepository;
 
-	@ApiOperation(value = "Get list of users in the System ", response = List.class)
+	@ApiOperation(value = "Get list of users", response = List.class)
 	@GetMapping(value="/users", produces= {"application/json","application/xml"})
 	public List<User> retrieveAllUsers() {
 		return userRepository.findAll();
 	}
 
-	@ApiOperation(value = "Get single user in the System ", response = User.class)
+	@ApiOperation(value = "Get single user details", response = User.class)
 	@GetMapping("/users/{id}")
 	public User retrieveUser(@PathVariable int id) {
 		Optional<User> user = userRepository.findById(id);
@@ -53,7 +55,7 @@ public class UserJPAController {
 		return user.get();
 	}
 
-	@ApiOperation(value = "Delete a user in the System ", response = ResponseEntity.class)
+	@ApiOperation(value = "Delete a user", response = ResponseEntity.class)
 	@DeleteMapping("/users/{id}")
 	public ResponseEntity<User> deleteUser(@PathVariable int id) {
 		userRepository.deleteById(id);
@@ -61,7 +63,7 @@ public class UserJPAController {
 		return new ResponseEntity<User>(HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "Create a user in the System ", response = ResponseEntity.class)
+	@ApiOperation(value = "Create a user", response = ResponseEntity.class)
 	@PostMapping("/users")
 	public ResponseEntity<Object> createUser(@Valid @RequestBody User user /*, BindingResult binding*/) {
 		
@@ -81,5 +83,37 @@ public class UserJPAController {
 
 		return new ResponseEntity<Object>(savedUser, HttpStatus.CREATED);
 	}
-	
+
+	@ApiOperation(value = "Fetch user posts", response = ResponseEntity.class)
+	@GetMapping("/users/{id}/posts")
+	public ResponseEntity<Object> retrieveUserPosts(@PathVariable int id) {
+		Optional<User> user = userRepository.findById(id);
+
+		if (!user.isPresent())
+			throw new UserNotFoundException("Invalid User Id :- " + id);
+
+		int postCount = user.get().getPosts().size();
+		if (postCount <= 0) {
+			return new ResponseEntity<Object>("No Posts found for the user", null, HttpStatus.NO_CONTENT);
+		} else {
+			return new ResponseEntity<Object>(user.get().getPosts(), HttpStatus.CREATED);
+		}
+	}
+
+	@ApiOperation(value = "Create a Post", response = ResponseEntity.class)
+	@PostMapping("/users/{id}/posts")
+	public ResponseEntity<Object> createPost(@PathVariable Integer id, @Valid @RequestBody Post post) {
+
+		Optional<User> user = userRepository.findById(id);
+
+		if (!user.isPresent())
+			throw new UserNotFoundException("Invalid User Id :- " + id);
+
+		User newUser = user.get();
+		post.setUser(newUser);
+		postRepository.save(post);
+
+		return new ResponseEntity<Object>(post, HttpStatus.CREATED);
+	}
+
 }

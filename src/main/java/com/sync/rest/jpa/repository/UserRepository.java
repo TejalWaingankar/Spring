@@ -1,4 +1,4 @@
-package com.sync.rest.controller.jpa;
+package com.sync.rest.jpa.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
