@@ -1,6 +1,7 @@
 package com.sync.rest.controller.jpa;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -44,23 +45,20 @@ public class UserJPAController {
 	@ApiOperation(value = "Get single user in the System ", response = User.class)
 	@GetMapping("/users/{id}")
 	public User retrieveUser(@PathVariable int id) {
-		User user = service.findOne(id);
+		Optional<User> user = userRepository.findById(id);
 
-		if (user == null)
+		if (!user.isPresent())
 			throw new UserNotFoundException("Invalid User Id :- " + id);
 
-		return user;
+		return user.get();
 	}
 
 	@ApiOperation(value = "Delete a user in the System ", response = ResponseEntity.class)
 	@DeleteMapping("/users/{id}")
 	public ResponseEntity<User> deleteUser(@PathVariable int id) {
-		User user = service.deleteById(id);
+		userRepository.deleteById(id);
 
-		if (user == null)
-			throw new UserNotFoundException("Invalid User Id :- " + id);
-
-		return new ResponseEntity<User>(user, HttpStatus.OK);
+		return new ResponseEntity<User>(HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Create a user in the System ", response = ResponseEntity.class)
@@ -79,7 +77,7 @@ public class UserJPAController {
 			return new ResponseEntity<Object>(exceptionResponse, HttpStatus.BAD_REQUEST);
 		}*/
 		
-		User savedUser = service.save(user);
+		User savedUser = userRepository.save(user);
 
 		return new ResponseEntity<Object>(savedUser, HttpStatus.CREATED);
 	}

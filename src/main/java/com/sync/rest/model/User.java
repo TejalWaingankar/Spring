@@ -40,7 +40,7 @@ public class User {
 
 	@Past(message="Birthdate can NOT be in future.")
 	@ApiModelProperty("Birthdate can NOT be in future.")
-	@JsonIgnore
+	//@JsonIgnore
 	private Date birthDate;
 	
 	public User() {
