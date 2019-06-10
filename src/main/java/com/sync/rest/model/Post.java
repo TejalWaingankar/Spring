@@ -5,6 +5,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -13,8 +15,10 @@ public class Post {
 
 	@Id
 	@GeneratedValue
+	@NotNull
 	private Integer id;
 
+	@NotBlank
 	private String description;
 
 	@ManyToOne(fetch = FetchType.LAZY)
